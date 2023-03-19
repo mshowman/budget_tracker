@@ -3,7 +3,7 @@ pub mod item_actions;
 use crate::models::item::Item;
 use sqlx::{migrate::MigrateDatabase, Error, Pool, Sqlite, SqlitePool};
 
-const DB_URL: &str = "sqlite://../budget_tracker.db";
+const DB_URL: &str = "sqlite://budget_tracker.db";
 
 #[tauri::command]
 pub async fn create_database() {

@@ -8,4 +8,4 @@ node_modules
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-budget_tracker.db*
+src-tauri/budget_tracker.db*

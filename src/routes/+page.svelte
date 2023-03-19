@@ -17,10 +17,6 @@
 
 	export let data;
 
-	function navToItem(id: number) {
-		location.href = `/items/${id}`;
-	}
-
 	async function addRandomItem() {
 		let result = await invoke('add_item', {
 			name: 'Test',
@@ -85,7 +81,7 @@
 								size="xs"
 								compact
 								ripple
-								on:click={() => navToItem(index)}
+								on:click={() => `/items/${item.id}`}
 							>
 								View Item
 							</Button>
