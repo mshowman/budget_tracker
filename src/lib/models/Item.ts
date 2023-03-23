@@ -8,5 +8,6 @@ export interface Item {
 
 export enum Category {
 	BILLS = 'BILLS',
-	INCOME = 'INCOME'
+	INCOME = 'INCOME',
+	UNSET = 'UNSET'
 }

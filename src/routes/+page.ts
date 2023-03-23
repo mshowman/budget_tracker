@@ -1,13 +1,7 @@
 import type { Item } from '$lib/models/Item';
-import { invoke } from '@tauri-apps/api/tauri';
+import { database } from '$lib/stores/DatabaseStore';
 
 export async function load({}) {
-	await invoke('create_database', {});
-	let itemsLoaded: Item[] = await invoke('select_all_items', {});
-
-	console.log(itemsLoaded);
-
-	return {
-		items: itemsLoaded
-	};
+	await database.create_db();
+	await database.getAllItems();
 }

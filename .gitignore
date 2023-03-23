@@ -3,9 +3,9 @@ node_modules
 /build
 /.svelte-kit
 /package
-.env
-.env.*
+src-tauri/.env
+src-tauri/.env.*
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
-src-tauri/budget_tracker.db*
+budgettracker.db*
