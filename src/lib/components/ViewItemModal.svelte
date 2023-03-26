@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Item } from '$lib/models/Item';
 	import { Container, Modal, Title, Text } from '@svelteuidev/core';
-	import { format, parseISO, subHours } from 'date-fns';
+	import { format, parseISO } from 'date-fns';
 	import { TriangleRight } from 'radix-icons-svelte';
 
 	export let opened: boolean, close: () => void, item: Item;
@@ -20,7 +20,7 @@
 		</Text>
 		<Text my={15}>
 			<TriangleRight />
-			{format(subHours(parseISO(item.date), 4), 'Pp')}
+			{format(parseISO(item.date), 'Pp')}
 		</Text>
 	</Container>
 </Modal>

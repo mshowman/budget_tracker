@@ -7,10 +7,11 @@ export const items = writable<Item[]>([]);
 export class DatabaseStore {
 	db?: Database;
 
-	async create_db() {
+	async createDB() {
 		this.db = await Database.load('sqlite:budgettracker.db');
 
 		await this.createItemsTable();
+		// await this.addItem("Test", 1200.435, Category.BILLS);
 	}
 
 	async createItemsTable() {
