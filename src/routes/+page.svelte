@@ -1,21 +1,35 @@
 <script lang="ts">
 	import AddItemModal from '$lib/components/AddItemModal.svelte';
 	import OverviewCard from '$lib/components/OverviewCard.svelte';
+	import Toast from '$lib/components/Toast.svelte';
 	import { items } from '$lib/stores/DatabaseStore';
 	import { Button, Container, Grid, Text, Affix } from '@svelteuidev/core';
 
 	let addItemModal = false;
 
+	let showToast = false,
+		message: string,
+		loading = true,
+		wasSuccessful = false;
+
 	async function addItem() {
 		addItemModal = true;
 	}
 
-	function closeModal() {
+	function closeModal(msg: string, outcome: boolean) {
 		addItemModal = false;
+		message = msg;
+		loading = false;
+		wasSuccessful = outcome;
+		showToast = true;
 	}
 </script>
 
-<AddItemModal opened={addItemModal} close={closeModal} />
+{#if showToast}
+	<Toast {message} {loading} {wasSuccessful} handleClose={() => (showToast = false)} />
+{/if}
+
+<AddItemModal opened={addItemModal} close={(message, outcome) => closeModal(message, outcome)} />
 
 <Grid cols={14} justify="center" align="flex-start" mt={12}>
 	<Grid.Col span={1}>

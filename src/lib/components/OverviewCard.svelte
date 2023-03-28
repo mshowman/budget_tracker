@@ -4,10 +4,16 @@
 
 	import { Button, Card, Group, Title, Text } from '@svelteuidev/core';
 	import { format, parseISO } from 'date-fns';
+	import Toast from './Toast.svelte';
 	import ViewItemModal from './ViewItemModal.svelte';
 
 	export let item: Item;
 	let opened = false;
+
+	let showToast = false,
+		message: string,
+		loading = true,
+		wasSuccessful = false;
 
 	function closeModal() {
 		opened = false;
@@ -24,11 +30,28 @@
 
 		response.then((ok) => {
 			if (ok) {
-				database.removeItem(item.id).then(() => console.log(`Removed item`));
+				database
+					.removeItem(item.id)
+					.then(() => {
+						message = `Removed Item -- ${item.name}`;
+						wasSuccessful = true;
+					})
+					.catch((error) => {
+						message = `Failed to remove item -- ${error}`;
+						wasSuccessful = false;
+					})
+					.finally(() => {
+						loading = false;
+						showToast = true;
+					});
 			}
 		});
 	}
 </script>
+
+{#if showToast}
+	<Toast {message} {loading} {wasSuccessful} handleClose={() => (showToast = false)} />
+{/if}
 
 <ViewItemModal {item} {opened} close={closeModal} />
 <Card
