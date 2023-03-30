@@ -1,19 +1,15 @@
 <script lang="ts">
 	import { Category, type Item } from '$lib/models/Item';
 	import { database } from '$lib/stores/DatabaseStore';
+	import { toastStore } from '$lib/stores/ToastStore';
 
 	import { Button, Card, Group, Title, Text } from '@svelteuidev/core';
 	import { format, parseISO } from 'date-fns';
-	import Toast from './Toast.svelte';
 	import ViewItemModal from './ViewItemModal.svelte';
 
 	export let item: Item;
 	let opened = false;
-
-	let showToast = false,
-		message: string,
-		loading = true,
-		wasSuccessful = false;
+	let timeoutId: number;
 
 	function closeModal() {
 		opened = false;
@@ -24,6 +20,9 @@
 	}
 
 	function removeItem() {
+		let message: string,
+			wasSuccessful = false;
+
 		let response = new Promise((res) => {
 			res(confirm('Are you sure?'));
 		});
@@ -41,17 +40,12 @@
 						wasSuccessful = false;
 					})
 					.finally(() => {
-						loading = false;
-						showToast = true;
+						toastStore.showToast(wasSuccessful, message);
 					});
 			}
 		});
 	}
 </script>
-
-{#if showToast}
-	<Toast {message} {loading} {wasSuccessful} handleClose={() => (showToast = false)} />
-{/if}
 
 <ViewItemModal {item} {opened} close={closeModal} />
 <Card

@@ -1,22 +1,28 @@
 <script lang="ts">
+	import { toastStatus, toastStore } from '$lib/stores/ToastStore';
 	import { Affix, Notification, Text } from '@svelteuidev/core';
 	import { CheckCircled, CrossCircled } from 'radix-icons-svelte';
 	import { fade } from 'svelte/transition';
 
-	export let loading: boolean, wasSuccessful: boolean, message: string, handleClose: () => void;
+	let id: string, wasSuccessful: boolean, message: string;
 
-	setTimeout(() => handleClose(), 5000);
+	$: {
+		if ($toastStatus.length > 0) {
+			id = $toastStatus.at(0)?.id ?? '';
+			wasSuccessful = $toastStatus.at(0)?.wasSuccessful ?? false;
+			message = $toastStatus.at(0)?.message ?? '';
+		}
+	}
 </script>
 
 <Affix position={{ top: 20, right: 20 }}>
 	<div transition:fade>
 		<Notification
 			title="Test notification"
-			{loading}
 			override={{ boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.42), 0 6px 20px 0 rgba(0, 0, 0, 0.49)' }}
 			icon={wasSuccessful ? CheckCircled : CrossCircled}
 			color={wasSuccessful ? 'blue' : 'red'}
-			on:close={handleClose}
+			on:close={() => toastStore.dismissToast(id)}
 		>
 			<Text size={16}>{message}</Text>
 		</Notification>

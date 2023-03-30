@@ -13,7 +13,7 @@
 		Title
 	} from '@svelteuidev/core';
 
-	export let opened: boolean, close: (message: string, outcome: boolean) => void;
+	export let opened: boolean, close: (outcome: boolean, message: string) => void;
 
 	let item: Item = defaultItem();
 
@@ -32,7 +32,7 @@
 		if (!!name && name.length > 0 && !Number.isNaN(amount) && amount >= 0) {
 			await database.addItem(name, amount, category);
 			item = defaultItem();
-			close(`Added new item -- ${name}`, true);
+			close(true, `Added new item -- ${name}`);
 		}
 	}
 
@@ -41,7 +41,7 @@
 	}
 </script>
 
-<Modal {opened} centered on:close={close}>
+<Modal {opened} centered>
 	<Container mt={12} size="xl">
 		<Title>Add New Item</Title>
 		<TextInput required label="Name" placeholder="What are we tracking?" bind:value={item.name} />
