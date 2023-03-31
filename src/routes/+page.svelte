@@ -4,6 +4,7 @@
 	import { items } from '$lib/stores/DatabaseStore';
 	import { toastStore } from '$lib/stores/ToastStore';
 	import { Button, Container, Grid, Text, Affix } from '@svelteuidev/core';
+	import { addMonths, eachMonthOfInterval, format, startOfMonth, subMonths } from 'date-fns';
 
 	let addItemModal = false;
 
@@ -15,6 +16,13 @@
 		addItemModal = false;
 		toastStore.showToast(outcome, msg);
 	}
+
+	let months = eachMonthOfInterval({
+		start: startOfMonth(subMonths(new Date(), 1)),
+		end: startOfMonth(addMonths(new Date(), 10))
+	}).map((month) => format(month, 'MMM'));
+
+	console.log(months);
 </script>
 
 <AddItemModal opened={addItemModal} close={(outcome, message) => closeModal(outcome, message)} />
@@ -22,20 +30,20 @@
 <Grid cols={14} justify="center" align="flex-start" mt={12}>
 	<Grid.Col span={1}>
 		<Container size="sm">
-			<Text>Jan</Text>
+			<Text>{months[0]}</Text>
 		</Container>
 	</Grid.Col>
 
 	<Grid.Col span={3} override={{ backgroundColor: 'lightgray' }}>
-		<Text align="center" size="lg" weight="extrabold">Feb</Text>
+		<Text align="center" size="lg" weight="extrabold">{months[1]}</Text>
 		{#each $items as item}
 			<OverviewCard {item} />
 		{/each}
 	</Grid.Col>
-	{#each Array(10).fill(0) as _}
+	{#each Array(10).fill(0) as _, index}
 		<Grid.Col span={1}>
 			<Container size="sm">
-				<Text>Col</Text>
+				<Text>{months[index + 2]}</Text>
 			</Container>
 		</Grid.Col>
 	{/each}
