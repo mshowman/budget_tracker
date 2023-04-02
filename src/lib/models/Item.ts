@@ -4,6 +4,7 @@ export interface Item {
 	amount: number;
 	date: string;
 	category?: Category;
+	description?: string;
 }
 
 export enum Category {

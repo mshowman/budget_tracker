@@ -10,7 +10,7 @@
 <Modal {opened} centered on:close={close}>
 	<Container mt={12} size="xl">
 		<Title>Item {item.name}</Title>
-		<Text my={15}>There can be whatever here. Can edit info if wanted.</Text>
+		<Text weight="semibold" align="left">{item.description}</Text>
 		<Text my={15}>
 			<TriangleRight />
 			{item.amount.toLocaleString('en-US', {

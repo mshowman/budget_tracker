@@ -2,8 +2,6 @@ import { Category, type Item } from '$lib/models/Item';
 import { writable } from 'svelte/store';
 import Database from 'tauri-plugin-sql-api';
 
-export const items = writable<Item[]>([]);
-
 export class DatabaseStore {
 	db?: Database;
 
@@ -21,7 +19,8 @@ export class DatabaseStore {
 				name varchar NOT NULL,
 				amount real NOT NULL,
 				date DATETIME DEFAULT (datetime('now','localtime')),
-				category varchar
+				category varchar,
+				description varchar
 			);`
 		);
 	}
@@ -31,10 +30,15 @@ export class DatabaseStore {
 		items.update((items) => (items = result));
 	}
 
-	async addItem(nameParam: string, amountParam: number, categoryParam: Category = Category.UNSET) {
-		let action = 'INSERT INTO item (name, amount, category) VALUES ($1, $2, $3)';
+	async addItem(
+		nameParam: string,
+		amountParam: number,
+		categoryParam: Category = Category.UNSET,
+		descriptionParam: string = ''
+	) {
+		let action = 'INSERT INTO item (name, amount, category, description) VALUES ($1, $2, $3, $4)';
 
-		await this.db?.execute(action, [nameParam, amountParam, categoryParam]);
+		await this.db?.execute(action, [nameParam, amountParam, categoryParam, descriptionParam]);
 		await this.getAllItems();
 	}
 
@@ -47,3 +51,4 @@ export class DatabaseStore {
 }
 
 export let database = new DatabaseStore();
+export const items = writable<Item[]>([]);

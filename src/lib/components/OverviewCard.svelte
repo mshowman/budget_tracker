@@ -9,7 +9,6 @@
 
 	export let item: Item;
 	let opened = false;
-	let timeoutId: number;
 
 	function closeModal() {
 		opened = false;

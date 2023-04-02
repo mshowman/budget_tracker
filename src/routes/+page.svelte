@@ -17,12 +17,10 @@
 		toastStore.showToast(outcome, msg);
 	}
 
-	let months = eachMonthOfInterval({
+	const months = eachMonthOfInterval({
 		start: startOfMonth(subMonths(new Date(), 1)),
 		end: startOfMonth(addMonths(new Date(), 10))
 	}).map((month) => format(month, 'MMM'));
-
-	console.log(months);
 </script>
 
 <AddItemModal opened={addItemModal} close={(outcome, message) => closeModal(outcome, message)} />

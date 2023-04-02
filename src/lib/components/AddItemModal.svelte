@@ -23,14 +23,15 @@
 			name: '',
 			amount: 0,
 			category: Category.UNSET,
-			date: new Date().toLocaleString()
+			date: new Date().toLocaleString(),
+			description: ''
 		};
 	}
 
 	async function addItem() {
-		let { name, amount, category } = item;
+		let { name, amount, category, description } = item;
 		if (!!name && name.length > 0 && !Number.isNaN(amount) && amount >= 0) {
-			await database.addItem(name, amount, category);
+			await database.addItem(name, amount, category, description);
 			item = defaultItem();
 			close(true, `Added new item -- ${name}`);
 		}
@@ -56,7 +57,12 @@
 			/>
 			<NativeSelect bind:value={item.category} data={Object.values(Category)} label="Category" />
 		</Group>
-		<TextInput label="Description" placeholder="Any explanation for tracking this?" height={400} />
+		<TextInput
+			label="Description"
+			placeholder="Any explanation for tracking this?"
+			height={400}
+			bind:value={item.description}
+		/>
 		<Button on:click={addItem} override={{ my: 12 }}>Save Item</Button>
 	</Container>
 </Modal>
