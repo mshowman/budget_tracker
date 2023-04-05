@@ -10,12 +10,21 @@
 		NativeSelect,
 		NumberInput,
 		TextInput,
-		Title
+		Title,
+		Loader,
+		Center
 	} from '@svelteuidev/core';
+
+	import { Month, isSameMonth } from '@svelteuidev/dates';
+	import { addMonths, format, subMonths } from 'date-fns';
 
 	export let opened: boolean, close: (outcome: boolean, message: string) => void;
 
 	let item: Item = defaultItem();
+	let value = new Date();
+	let month: Date = value;
+	let formattedDate = format(value, 'PP');
+	let monthSwitched = false;
 
 	function defaultItem(): Item {
 		return {
@@ -37,16 +46,41 @@
 		}
 	}
 
+	function onClose() {
+		item = defaultItem();
+		close(false, 'FALSE');
+	}
+
 	function onChange(e: CustomEvent<number>) {
 		item.amount = e.detail;
 	}
+
+	function goBackMonth() {
+		value = subMonths(value, 1);
+	}
+
+	function goForwardMonth() {
+		value = addMonths(value, 1);
+	}
+
+	$: {
+		if (!isSameMonth(month, value)) {
+			monthSwitched = true;
+
+			setTimeout(() => {
+				month = value;
+				monthSwitched = false;
+			}, 100);
+		}
+		formattedDate = format(value, 'PP');
+	}
 </script>
 
-<Modal {opened} centered>
+<Modal {opened} centered on:close={onClose}>
 	<Container mt={12} size="xl">
 		<Title>Add New Item</Title>
 		<TextInput required label="Name" placeholder="What are we tracking?" bind:value={item.name} />
-		<Group>
+		<Group grow>
 			<NumberInput
 				bind:value={item.amount}
 				on:change={onChange}
@@ -60,9 +94,29 @@
 		<TextInput
 			label="Description"
 			placeholder="Any explanation for tracking this?"
-			height={400}
 			bind:value={item.description}
 		/>
-		<Button on:click={addItem} override={{ my: 12 }}>Save Item</Button>
+		<TextInput label="Date" bind:value={formattedDate} disabled override={{ opacity: 1.0 }} />
+
+		<Group override={{ my: 12 }} grow>
+			{#if monthSwitched}
+				<div
+					style="height: 250px; width: 214px; display: flex; justify-content: center; align-items: center"
+				>
+					<Loader variant="dots" />
+				</div>
+			{:else}
+				<Center>
+					<Month bind:value {month} onChange={(val) => (value = val)} firstDayOfWeek="sunday" />
+				</Center>
+			{/if}
+		</Group>
+		<Group grow>
+			<Button on:click={goBackMonth}>Back</Button>
+			<Button on:click={goForwardMonth}>Forward</Button>
+		</Group>
+		<Group grow>
+			<Button on:click={addItem} override={{ my: 12 }}>Save Item</Button>
+		</Group>
 	</Container>
 </Modal>

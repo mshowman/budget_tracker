@@ -9,7 +9,7 @@
 
 <Modal {opened} centered on:close={close}>
 	<Container mt={12} size="xl">
-		<Title>Item {item.name}</Title>
+		<Title>{item.name}</Title>
 		<Text weight="semibold" align="left">{item.description}</Text>
 		<Text my={15}>
 			<TriangleRight />

@@ -8,13 +8,14 @@
 
 	let addItemModal = false;
 
-	async function addItem() {
+	function addItem() {
 		addItemModal = true;
 	}
 
 	function closeModal(outcome: boolean, msg: string) {
 		addItemModal = false;
-		toastStore.showToast(outcome, msg);
+
+		if (outcome && msg != 'FALSE') toastStore.showToast(outcome, msg);
 	}
 
 	const months = eachMonthOfInterval({
