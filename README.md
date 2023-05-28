@@ -2,7 +2,7 @@
 I wanted to explore Tauri apps and my wife wanted a simple app to help budget.
 
 ## Tech Stack
-* [Svelte + SvelteKit](https://svelte.dev/) + [SvelteUI](https://www.svelteui.org/) for the frontend
+* [Svelte + SvelteKit](https://svelte.dev/) + [SvelteUI](https://www.svelteui.org/) + Typescript for the frontend
 * Rust + SQLite for the backend / persistence
 
 ## Usage
