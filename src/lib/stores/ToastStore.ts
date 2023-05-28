@@ -1,5 +1,7 @@
+import type { Item } from '$lib/models/Item';
 import { writable } from 'svelte/store';
 import { v4 } from 'uuid';
+import { database } from './DatabaseStore';
 
 interface ToastStatus {
 	id: string;
@@ -9,6 +11,33 @@ interface ToastStatus {
 
 class ToastStore {
 	trackedToasts: Map<string, number> = new Map();
+
+	removeItem(item: Item) {
+		let message: string,
+			wasSuccessful = false;
+
+		let response = new Promise((res) => {
+			res(confirm('Are you sure?'));
+		});
+
+		response.then((ok) => {
+			if (ok) {
+				database
+					.removeItem(item.id)
+					.then(() => {
+						message = `Removed Item -- ${item.name}`;
+						wasSuccessful = true;
+					})
+					.catch((error) => {
+						message = `Failed to remove item -- ${error}`;
+						wasSuccessful = false;
+					})
+					.finally(() => {
+						this.showToast(wasSuccessful, message);
+					});
+			}
+		});
+	}
 
 	showToast(wasSuccessful: boolean, message: string): void {
 		let newId = v4();

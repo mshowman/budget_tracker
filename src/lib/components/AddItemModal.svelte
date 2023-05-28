@@ -14,7 +14,6 @@
 		Loader,
 		Center
 	} from '@svelteuidev/core';
-
 	import { Month, isSameMonth } from '@svelteuidev/dates';
 	import { addMonths, format, subMonths } from 'date-fns';
 
@@ -40,7 +39,7 @@
 	async function addItem() {
 		let { name, amount, category, description } = item;
 		if (!!name && name.length > 0 && !Number.isNaN(amount) && amount >= 0) {
-			await database.addItem(name, amount, category, description);
+			await database.addItem(name, amount, category, description, value);
 			item = defaultItem();
 			close(true, `Added new item -- ${name}`);
 		}
@@ -79,7 +78,13 @@
 <Modal {opened} centered on:close={onClose}>
 	<Container mt={12} size="xl">
 		<Title>Add New Item</Title>
-		<TextInput required label="Name" placeholder="What are we tracking?" bind:value={item.name} />
+		<TextInput
+			required
+			label="Name"
+			placeholder="What are we tracking?"
+			bind:value={item.name}
+			autofocus
+		/>
 		<Group grow>
 			<NumberInput
 				bind:value={item.amount}
@@ -96,7 +101,7 @@
 			placeholder="Any explanation for tracking this?"
 			bind:value={item.description}
 		/>
-		<TextInput label="Date" bind:value={formattedDate} disabled override={{ opacity: 1.0 }} />
+		<TextInput label="Date" value={formattedDate} disabled />
 
 		<Group override={{ my: 12 }} grow>
 			{#if monthSwitched}

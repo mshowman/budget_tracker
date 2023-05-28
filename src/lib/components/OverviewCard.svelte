@@ -17,33 +17,6 @@
 	function viewItem() {
 		opened = true;
 	}
-
-	function removeItem() {
-		let message: string,
-			wasSuccessful = false;
-
-		let response = new Promise((res) => {
-			res(confirm('Are you sure?'));
-		});
-
-		response.then((ok) => {
-			if (ok) {
-				database
-					.removeItem(item.id)
-					.then(() => {
-						message = `Removed Item -- ${item.name}`;
-						wasSuccessful = true;
-					})
-					.catch((error) => {
-						message = `Failed to remove item -- ${error}`;
-						wasSuccessful = false;
-					})
-					.finally(() => {
-						toastStore.showToast(wasSuccessful, message);
-					});
-			}
-		});
-	}
 </script>
 
 <ViewItemModal {item} {opened} close={closeModal} />
@@ -70,7 +43,13 @@
 		<Button variant="gradient" radius="xl" size="xs" compact ripple on:click={() => viewItem()}>
 			View Item
 		</Button>
-		<Button variant="outline" radius="xl" size="xs" compact on:click={() => removeItem()}>
+		<Button
+			variant="outline"
+			radius="xl"
+			size="xs"
+			compact
+			on:click={() => toastStore.removeItem(item)}
+		>
 			Remove Item
 		</Button>
 	</Group>

@@ -1,29 +1,22 @@
 <script lang="ts">
-	import { Container, Title, Text, Anchor, Alert, Loader } from '@svelteuidev/core';
-	import { ExclamationTriangle } from 'radix-icons-svelte';
+	import type { Item } from '$lib/models/Item';
+	import { Container, Title, Text, Anchor, Loader } from '@svelteuidev/core';
 
-	export let data;
+	export let item: Item | null;
 </script>
 
 <slot>
-	{#await data}
+	{#await item}
 		<Loader variant="bars" />
 	{:then}
+		<Text>{item}</Text>
 		<Container mt={12} size="xl">
-			<Title>Item {data.itemId + 1}</Title>
-			<Text my={15}>Specific information to this item would be presented here</Text>
-			{#if data.secretMessage}
-				<Alert
-					icon={ExclamationTriangle}
-					title="Shhh! This is a secret!"
-					color="grape"
-					variant="filled"
-					m={16}
-				>
-					{data.secretMessage}
-				</Alert>
-			{/if}
-			<Anchor href="/">Back to Dashboard</Anchor>
+			<Title>{item?.name}</Title>
+			<Text>{item?.date}</Text>
+			<Text>{item?.amount}</Text>
+			<Text>{item?.description}</Text>
+			<Text>{item?.category}</Text>
+			<Anchor href="/items">Back to Table View</Anchor>
 		</Container>
 	{/await}
 </slot>

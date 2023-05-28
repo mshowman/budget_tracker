@@ -15,6 +15,6 @@
 		<Anchor href="/">Home Page</Anchor>
 	</Menu.Item>
 	<Menu.Item icon={Pencil1}>
-		<Anchor href="/items">Different Page</Anchor>
+		<Anchor href="/items">Table View</Anchor>
 	</Menu.Item>
 </Menu>
